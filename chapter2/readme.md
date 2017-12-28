@@ -1,4 +1,4 @@
-### 当一个有符号数和一个无符号数进行运算时,c语言会隐式地将有符号参数强制类型转换为无符号数
+## 当一个有符号数和一个无符号数进行运算时,c语言会隐式地将有符号参数强制类型转换为无符号数
 
 ### ex2.25无符号数造成死循环
 
@@ -7,9 +7,9 @@
 ### ex2.26字符串长度比较
 [代码](https://github.com/WallfacerRZD/CSAPP/blob/master/chapter2/ex2.26.c)
 
-### 对于x+y的位级表示, 简单丢弃任何权重大于![](http://chart.googleapis.com/chart?cht=tx&chl=2^{w-1})的位数就可以计算出和模![](http://chart.googleapis.com/chart?cht=tx&chl=2^{w})
+## 对于x+y的位级表示, 简单丢弃任何权重大于![](http://chart.googleapis.com/chart?cht=tx&chl=2^{w-1})的位数就可以计算出和模![](http://chart.googleapis.com/chart?cht=tx&chl=2^{w})
 
-### 模数加法构成阿贝尔群(闭, 结, 幺, 逆, 可交换)
+## 模数加法构成阿贝尔群(闭, 结, 幺, 逆, 可交换)
 
 ### ex2.27 检测无符号数溢出
 [代码](https://github.com/WallfacerRZD/CSAPP/blob/master/chapter2/ex2.27.c)
