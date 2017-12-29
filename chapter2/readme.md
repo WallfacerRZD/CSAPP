@@ -34,10 +34,10 @@
 > 5. a != NaN, a * a >= 0;
 
 - ## 强制转换
-> int转float: 不会溢出, 可能被舍入
-> int或float转double: 保存精确的数值
-> double转float: 可能溢出成+无穷或-无穷, 还可能被舍入
-> float转double或int: 值向零舍入
+> 1. int转float: 不会溢出, 可能被舍入
+> 2. int或float转double: 保存精确的数值
+> 3. double转float: 可能溢出成+无穷或-无穷, 还可能被舍入
+> 4. float转double或int: 值向零舍入
 
 
 
