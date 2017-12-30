@@ -201,7 +201,7 @@ int bang(int x) {
  *   Rating: 1
  */
 int tmin(void) {
-  return 2;
+  return 1<<31;
 }
 /* 
  * fitsBits - return 1 if x can be represented as an 
@@ -213,7 +213,12 @@ int tmin(void) {
  *   Rating: 2
  */
 int fitsBits(int x, int n) {
-  return 2;
+  /*
+   * 左移32-n位, 右移32-n位,如果和原来的数相同则可以用n位表示
+   */
+  int shift_count = 32 - n;
+  int temp = (x << shift_count) >> shift_count;
+  return ~(x ^ temp);
 }
 /* 
  * divpwr2 - Compute x/(2^n), for 0 <= n <= 30
@@ -224,6 +229,12 @@ int fitsBits(int x, int n) {
  *   Rating: 2
  */
 int divpwr2(int x, int n) {
+    // 正数直接移位, 负数加上偏置量后移位
+    int sign_x = x >> 31;
+    int shift_count = 1 << n;
+    int mask = (1 << n) + (~0);
+    int bias = sign_x & mask;
+    return (x + bias) >> n;
     return 2;
 }
 /* 
@@ -234,7 +245,7 @@ int divpwr2(int x, int n) {
  *   Rating: 2
  */
 int negate(int x) {
-  return 2;
+  return (~x) +1;
 }
 /* 
  * isPositive - return 1 if x > 0, return 0 otherwise 
@@ -244,7 +255,8 @@ int negate(int x) {
  *   Rating: 3
  */
 int isPositive(int x) {
-  return 2;
+  int sign = x >> 31;
+  return sign ^ 0x1;
 }
 /* 
  * isLessOrEqual - if x <= y  then return 1, else return 0 
@@ -254,7 +266,10 @@ int isPositive(int x) {
  *   Rating: 3
  */
 int isLessOrEqual(int x, int y) {
-  return 2;
+  // 未考虑溢出!!
+  int sub_result = y + (~x) + 1;
+  int sign = sub_result >> 31;
+  return !sign;
 }
 /*
  * ilog2 - return floor(log base 2 of x), where x > 0
@@ -278,7 +293,12 @@ int ilog2(int x) {
  *   Rating: 2
  */
 unsigned float_neg(unsigned uf) {
- return 2;
+  int NaN = 0xfffffffa;
+  int mask = 0x80000000;
+  if (uf == NaN) {
+    return NaN;
+  }
+  return uf & mask;
 }
 /* 
  * float_i2f - Return bit-level equivalent of expression (float) x
