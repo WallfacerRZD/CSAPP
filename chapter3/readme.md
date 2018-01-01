@@ -16,5 +16,34 @@
 > - 扩展到IA32(Intel Architecture 32bit)架构时, 这些寄存器也扩展到32位, 标号%eax-%ebp
 > - 扩展到x86-64后, 这些寄存器扩展到64位, 标号%rax-%rbp此外还增加8个寄存器, 标号%r8-%r15;所有16个寄存器的地位部分都可以作为字节, 字, 双字, 和四字数字访问.
 
+- ## 用条件控制来实现条件分支
+
+c语言中if-else语句通用形式模板如下:
+```
+if (test-expre){
+    then-statement
+}
+else{
+    else-statement
+}
+```
+编译器通常会使用下面这种形式:
+```
+t = test-expre;
+if (!t)
+    goto false;
+then-statement
+goto done;
+false:
+    else-statment
+done:
+```
+汇编器为then-statement和else-statement产生各自的代码块.插入条件和无条件分支,以保证能执行正确的代码块
+
+- ## 用条件传送来实现条件分支
+
+
+
+
 
 
