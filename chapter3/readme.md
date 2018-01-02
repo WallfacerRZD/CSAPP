@@ -16,7 +16,9 @@
 > - 扩展到IA32(Intel Architecture 32bit)架构时, 这些寄存器也扩展到32位, 标号%eax-%ebp
 > - 扩展到x86-64后, 这些寄存器扩展到64位, 标号%rax-%rbp此外还增加8个寄存器, 标号%r8-%r15;所有16个寄存器的地位部分都可以作为字节, 字, 双字, 和四字数字访问.
 
-- ## 用条件控制来实现条件分支
+- ## 分支
+
+### 用条件控制来实现条件分支
 
 c语言中if-else语句通用形式模板如下:
 ```
@@ -40,7 +42,67 @@ done:
 ```
 汇编器为then-statement和else-statement产生各自的代码块.插入条件和无条件分支,以保证能执行正确的代码块
 
-- ## 用条件传送来实现条件分支
+### 用条件传送来实现条件分支
+> - 编译器会计算两个表达式的值, 最后通过条件传送(cmove等指令)来把表达式的值传送给寄存器.
+> - 优点是契合现代cpu流水线,避免分支预测错误造成的性能处罚
+> - 缺点是如果两个表达式需要大量计算,会做大量不必要的计算.此外,如果两个表达式都计算可能会出现空指针的异常
+
+### 编译器不具有足够的信息来做出可靠的决定使用(条件控制还是条件传送)
+
+- ## 循环
+#### do-while循环
+通常会翻译为:
+```
+loop:
+ body-statement
+ t = test-expr;
+ if (t)
+    goto loop;
+```
+
+#### while循环
+翻译方法
+1. jump to middle(gcc -Og优化)
+```
+goto test;
+loop:
+    body-statement
+test:
+    t = test-expr;
+    if (t)
+        goto loop;
+```
+2. guarded-do(gcc -O1优化)
+```
+t = test-expr;
+if(!t)
+    goto done;
+do
+    body-statement
+    while(test-expr)
+done:
+```
+
+#### for循环
+C语言标准说明下面两种代码行为一样
+```
+for (init-expr; test-expr; update-expre) {
+    body-statement
+}
+```
+
+```
+init-expr
+while (test-expre) {
+    body-statement
+    update-expr;
+}
+
+```
+与for循环等价的while循环的翻译取决于优化等级(见while循环)
+
+
+
 
 
 
