@@ -101,6 +101,8 @@ while (test-expre) {
 ```
 与for循环等价的while循环的翻译取决于优化等级(见while循环)
 
+- ## switch语句
+switch语句可以根据一个**整数**索引值进行多重分支.gcc使用跳表实现.优点是指定switch语句的时间与开关的情况的数量无关.
 
 
 
