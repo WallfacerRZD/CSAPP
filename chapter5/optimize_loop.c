@@ -2,9 +2,9 @@
 #include<stdlib.h>
 #include<time.h>
 
-#define OP +
-#define IDENT 0
-typedef long data_t; 
+#define OP *
+#define IDENT 1
+typedef double data_t; 
 
 typedef struct {
     data_t *data;
@@ -103,6 +103,47 @@ void combine4(vec_ptr v, data_t *dest) {
     printf("combine4:%d\n", end-begin);
 }
 
+void combine5(vec_ptr v, data_t *dest) {
+    clock_t begin = clock();
+    long i;
+    long length = get_vec_len(v);
+    long limit = length - 1;
+    data_t *data = get_vec_start(v);
+    data_t acc = IDENT;
+
+    // 循环展开优化
+    for (i = 0; i < limit; i += 2) {
+        acc = (acc OP data[i]) OP data[i+1];
+    }
+    for (; i < length; i++) {
+        acc = acc OP data[i];
+    }
+    *dest = acc;
+    clock_t end = clock();
+    printf("combine5:%d\n", end - begin);
+}
+
+void combine6(vec_ptr v, data_t *dest) {
+    clock_t begin = clock();
+    long i;
+    long length = get_vec_len(v);
+    long limit = length - 1;
+    data_t *data = get_vec_start(v);
+    data_t acc0 = IDENT, acc1 = IDENT;
+
+    for (i = 0; i < limit; i += 2) {
+        acc0 = acc0 OP data[i];
+        acc1 = acc1 OP data[i+1];
+    }
+
+    for (; i < length; ++i) {
+        acc0 = acc0 OP data[i];
+    }
+    *dest = acc0 OP acc1;
+    clock_t end = clock();
+    printf("combine6:%d\n", end-begin);
+}
+
 int main() {
     vec_ptr test_vec = get_new_vec(99999999);
     data_t dest;
@@ -110,6 +151,8 @@ int main() {
     combine2(test_vec, &dest);
     combine3(test_vec, &dest);
     combine4(test_vec, &dest);
+    combine5(test_vec, &dest);
+    combine6(test_vec, &dest);
     free(test_vec);
     return 0;
 }
