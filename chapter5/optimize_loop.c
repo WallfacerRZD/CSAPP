@@ -4,8 +4,7 @@
 
 #define OP *
 #define IDENT 1
-#define N 9999999
-typedef double data_t; 
+typedef double data_t;
 
 typedef struct {
     data_t *data;
@@ -182,8 +181,9 @@ void combine7(vec_ptr v, data_t *dest) {
 
 
 void minmax1() {
-    long a[N];
-    long b[N];
+    #define N 99999999
+    long *a = (long*)malloc(N * sizeof(long));
+    long *b = (long*)malloc(N * sizeof(long));
     long i;
     srand((unsigned)time(NULL));
     for (i = 0; i < N; ++i) {
@@ -202,12 +202,40 @@ void minmax1() {
         }
     }
     clock_t end = clock();
-    printf("minmax1:");
-    printf("minmax1:%d", end-begin);
+    printf("minmax1:%d\n", end-begin);
+    free(a);
+    free(b);
 }
+
+void minmax2() {
+    #define N 99999999
+    long *a = (long*)malloc(N * sizeof(long));
+    long *b = (long*)malloc(N * sizeof(long));
+    long i;
+    srand((unsigned)time(NULL));
+    for (i = 0; i < N; ++i) {
+        a[i] = rand() % 1000;
+    }
+    srand((unsigned)time(NULL));
+    for (i = 0; i < N; ++i) {
+        b[i] = rand() % 1000;
+    }
+    clock_t begin = clock();
+    for (i = 0; i < N; ++i) {
+        long min = a[i] < b[i] ? a[i] : b[i];
+        long max = a[i] < b[i] ? b[i] : a[i];
+        a[i] = min;
+        b[i] = max;
+    }
+    clock_t end = clock();
+    printf("minmax2:%d\n", end-begin);
+    free(a);
+    free(b);
+}
+
 int main() {
-    vec_ptr test_vec = get_new_vec(99999999);
-    data_t dest;
+    // vec_ptr test_vec = get_new_vec(99999999);
+    // data_t dest;
     // combine1(test_vec, &dest);
     // combine2(test_vec, &dest);
     // combine3(test_vec, &dest);
@@ -216,7 +244,6 @@ int main() {
     // combine5(test_vec, &dest);
     // combine6(test_vec, &dest);
     // combine7(test_vec, &dest);
-    minmax1();
-    free(test_vec);
+    // free(test_vec);
     return 0;
 }
