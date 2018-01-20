@@ -4,6 +4,7 @@
 
 #define OP *
 #define IDENT 1
+#define N 9999999
 typedef double data_t; 
 
 typedef struct {
@@ -90,7 +91,6 @@ void combine3(vec_ptr v, data_t *dest) {
 void combine4(vec_ptr v, data_t *dest) {
     clock_t begin = clock();
     long i;
-    *dest = IDENT;
     long len = get_vec_len(v);
     data_t *data = get_vec_start(v);
     // 减少内存引用
@@ -101,6 +101,22 @@ void combine4(vec_ptr v, data_t *dest) {
     *dest = acc;
     clock_t end = clock();
     printf("combine4:%d\n", end-begin);
+}
+
+void combine4b(vec_ptr v, data_t *dest) {
+    clock_t begin = clock();
+    long i;
+    long len = get_vec_len(v);
+    // 减少内存引用
+    data_t acc = IDENT;
+    for (i = 0; i < len; ++i) {
+        if (i >= 0 && i < v->length) {
+            acc = acc OP v->data[i];
+        }
+    }
+    *dest = acc;
+    clock_t end = clock();
+    printf("combine4b:%d\n", end-begin);
 }
 
 void combine5(vec_ptr v, data_t *dest) {
@@ -144,15 +160,63 @@ void combine6(vec_ptr v, data_t *dest) {
     printf("combine6:%d\n", end-begin);
 }
 
+void combine7(vec_ptr v, data_t *dest) {
+    clock_t begin = clock();
+    long i;
+    long length = get_vec_len(v);
+    long limit = length - 1;
+    data_t *data = get_vec_start(v);
+    data_t acc = IDENT;
+
+    // 循环展开优化
+    for (i = 0; i < limit; i += 2) {
+        acc = acc OP (data[i] OP data[i+1]);
+    }
+    for (; i < length; i++) {
+        acc = acc OP data[i];
+    }
+    *dest = acc;
+    clock_t end = clock();
+    printf("combine7:%d\n", end - begin);
+}
+
+
+void minmax1() {
+    long a[N];
+    long b[N];
+    long i;
+    srand((unsigned)time(NULL));
+    for (i = 0; i < N; ++i) {
+        a[i] = rand() % 1000;
+    }
+    srand((unsigned)time(NULL));
+    for (i = 0; i < N; ++i) {
+        b[i] = rand() % 1000;
+    }
+    clock_t begin = clock();
+    for (i = 0; i < N; ++i) {
+        if (a[i] > b[i]) {
+            long temp = a[i];
+            a[i] = b[i];
+            b[i] = temp;
+        }
+    }
+    clock_t end = clock();
+    printf("minmax1:");
+    printf("minmax1:%d", end-begin);
+}
 int main() {
     vec_ptr test_vec = get_new_vec(99999999);
     data_t dest;
-    combine1(test_vec, &dest);
-    combine2(test_vec, &dest);
-    combine3(test_vec, &dest);
-    combine4(test_vec, &dest);
-    combine5(test_vec, &dest);
-    combine6(test_vec, &dest);
+    // combine1(test_vec, &dest);
+    // combine2(test_vec, &dest);
+    // combine3(test_vec, &dest);
+    // combine4(test_vec, &dest);
+    // combine4b(test_vec, &dest);
+    // combine5(test_vec, &dest);
+    // combine6(test_vec, &dest);
+    // combine7(test_vec, &dest);
+    minmax1();
     free(test_vec);
     return 0;
 }
