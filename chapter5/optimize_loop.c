@@ -145,7 +145,7 @@ void combine6(vec_ptr v, data_t *dest) {
     long limit = length - 1;
     data_t *data = get_vec_start(v);
     data_t acc0 = IDENT, acc1 = IDENT;
-
+    // 多个累计变量
     for (i = 0; i < limit; i += 2) {
         acc0 = acc0 OP data[i];
         acc1 = acc1 OP data[i+1];
@@ -167,7 +167,7 @@ void combine7(vec_ptr v, data_t *dest) {
     data_t *data = get_vec_start(v);
     data_t acc = IDENT;
 
-    // 循环展开优化
+    // 重新结合变换优化
     for (i = 0; i < limit; i += 2) {
         acc = acc OP (data[i] OP data[i+1]);
     }
@@ -234,16 +234,16 @@ void minmax2() {
 }
 
 int main() {
-    // vec_ptr test_vec = get_new_vec(99999999);
-    // data_t dest;
-    // combine1(test_vec, &dest);
-    // combine2(test_vec, &dest);
-    // combine3(test_vec, &dest);
-    // combine4(test_vec, &dest);
-    // combine4b(test_vec, &dest);
-    // combine5(test_vec, &dest);
-    // combine6(test_vec, &dest);
-    // combine7(test_vec, &dest);
-    // free(test_vec);
+    vec_ptr test_vec = get_new_vec(99999999);
+    data_t dest;
+    combine1(test_vec, &dest);
+    combine2(test_vec, &dest);
+    combine3(test_vec, &dest);
+    combine4(test_vec, &dest);
+    combine4b(test_vec, &dest);
+    combine5(test_vec, &dest);
+    combine6(test_vec, &dest);
+    combine7(test_vec, &dest);
+    free(test_vec);
     return 0;
 }
