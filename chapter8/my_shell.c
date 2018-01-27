@@ -1,3 +1,8 @@
+/*
+* 简单shell
+* OS: Linux
+*/
+
 #include "csapp.h"
 #define MAXARGS 128
 
