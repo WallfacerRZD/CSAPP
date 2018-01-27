@@ -231,7 +231,7 @@ int setpgid(pid_t pid, pid_t pgid);
 `linux> /bin/kill -9 2333`   
 发送信号9给进程2333   
 
-`linux> /bin/kill -9 -2333`
+`linux> /bin/kill -9 -2333`  
 发送信号9给进程组2333中的每个进程.
 
 ##### 从键盘发送信号
@@ -287,7 +287,7 @@ typedef void(*sighhandler_t)(int);
 */
 signhandler_t signal(int signum, sighandler_t handler);
 ```   
-[接受信号](./receive_signal.c)
+[捕获信号](./catch_signal.c)
 
 
 
