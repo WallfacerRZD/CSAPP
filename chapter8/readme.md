@@ -290,6 +290,41 @@ signhandler_t signal(int signum, sighandler_t handler);
 [捕获信号](./catch_signal.c)
 
 
+#### 阻塞信号和解除阻塞信号
+Linux提供阻塞信号的隐式和显示机制:
+1. 隐式阻塞机制: 内存默认阻塞当前处理程序正在处理信号类型的待处理信号.
+2. 显示阻塞机制: sigprocmask函数和它的辅助函数, 明确阻塞和解除阻塞选定的信号
+
+阻塞信号的目的是防止信号打断敏感操作   
+
+#### 编写信号处理程序
+
+.....   
+#### 非本地跳转
+
+C语言提供一种用户级异常控制流, 称为非本地跳转, 它将控制直接从一个函数转移到另一个当前正在执行的函数, 而不需要正常的调用->返回序列.    
+
+```
+#include<setjmp.h>
+int setjmp(jmp_buf env);
+int sigsetjmp(sigjmp_buf env, int savesigs);
+void longjmp(jmp_buf env, int retval);
+void siglongjmp(sigjmp_buf env, int retval);
+```
+
+#### C++和Java的软件异常
+C++和Java提供的异常机制是C语言setjmp和longjmp函数更加结构化的版本.   
+
+
+***
+2016/1/28   
+家
+
+
+
+
+
+
 
 
 
