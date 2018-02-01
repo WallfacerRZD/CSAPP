@@ -196,7 +196,8 @@ int getnameinfo(const struct sockaddr *sa, socklen_t salen, char *host, size_t h
 运行结果:  
 ![运行结果](./6.jpg)   
 
-
+## web服务器
+[tiny](./tiny.c)
 
 
 
